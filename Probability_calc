@@ -1,0 +1,41 @@
+import random
+
+class Hat():
+    def __init__(self, **balls):
+        self.color=balls
+        self.amount=balls.values()
+        self.contents=[]
+        for a,b in zip(balls.keys(), balls.values()):
+            for i in range(b):
+                self.contents.append(a)
+
+    def draw(self, num=0):
+        self.removed_balls=[]
+        if num>len(self.contents):
+            for ball in range(len(self.contents)):
+                self.removed_ball=self.contents.pop(random.randint(0,len(self.contents)-1))
+                self.removed_balls.append(self.removed_ball)
+        else:
+            for ball in range(num):
+                self.removed_ball=self.contents.pop(random.randint(0,len(self.contents)-1))
+                self.removed_balls.append(self.removed_ball)  
+
+        return self.removed_balls
+        
+def experiment(hat, expected_balls, num_balls_drawn, num_experiments):
+    goal_reached=0
+    for i in range(num_experiments):
+        balls_taken=hat.draw(num_balls_drawn)
+        single_result=[] 
+        for b,c in zip(expected_balls.keys(), expected_balls.values()):
+            if balls_taken.count(b)>=c:
+                single_result.append(1)
+            else:
+                single_result.append(0)       
+
+        if 0 not in single_result:
+            goal_reached+=1
+
+        hat.contents=hat.contents+balls_taken
+
+    return goal_reached/num_experiments
